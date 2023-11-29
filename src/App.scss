@@ -1,0 +1,36 @@
+@use "styles/reset";
+
+* {
+  margin: 0 auto;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.header-section {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 85px;
+
+  .nav-bar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    height: fit-content;
+
+    .nav-links-list {
+      display: flex;
+
+      li {
+        margin: 0 10px;
+        list-style: none;
+      }
+
+      li > a {
+        text-decoration: none;
+        color: #000;
+      }
+    }
+  }
+}
