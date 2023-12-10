@@ -1,4 +1,6 @@
 @use "styles/reset";
+@use "styles/variables";
+@import "styles/home";
 
 * {
   margin: 0 auto;
@@ -8,6 +10,7 @@
 
 .header-section {
   display: flex;
+  flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
   height: 85px;
@@ -30,6 +33,22 @@
       li > a {
         text-decoration: none;
         color: #000;
+      }
+    }
+  }
+  .categories-container {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+
+    .category-links-list {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+      width: 85%;
+
+      li > a {
+        text-decoration: none;
       }
     }
   }
