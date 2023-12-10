@@ -1,0 +1,23 @@
+@import "variables";
+
+.products-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 80%;
+  gap: 10px;
+
+  .products-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 185px;
+    height: 200px;
+    font-family: $fontFamily;
+
+    p {
+    }
+  }
+}
