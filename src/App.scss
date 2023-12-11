@@ -1,6 +1,7 @@
 @use "styles/reset";
 @use "styles/variables";
 @import "styles/home";
+@import url('https://fonts.googleapis.com/css2?family=Nobile:wght@400;500&family=Poppins:wght@100;200;300;400&family=Rethink+Sans:ital,wght@0,400;0,500;1,400&display=swap');
 
 * {
   margin: 0 auto;
@@ -19,7 +20,7 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    width: 100%;
+    width: 97%;
     height: fit-content;
 
     .nav-links-list {
@@ -33,22 +34,6 @@
       li > a {
         text-decoration: none;
         color: #000;
-      }
-    }
-  }
-  .categories-container {
-    display: flex;
-    justify-content: flex-start;
-    width: 100%;
-
-    .category-links-list {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-evenly;
-      width: 85%;
-
-      li > a {
-        text-decoration: none;
       }
     }
   }

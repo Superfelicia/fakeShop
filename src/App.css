@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Nobile:wght@400;500&family=Poppins:wght@100;200;300;400&family=Rethink+Sans:ital,wght@0,400;0,500;1,400&display=swap");
 /* http://meyerweb.com/eric/tools/css/reset/
 v2.0 | 20110126
 License: none (public domain)
@@ -52,23 +53,79 @@ table {
   border-spacing: 0;
 }
 
-.products-container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  width: 80%;
-  gap: 10px;
-}
-.products-container .products-content {
+.home-section {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  width: 185px;
-  height: 200px;
-  font-family: "Helvetica", sans-serif;
+  width: 100%;
 }
+.home-section .hero-container {
+  width: 100%;
+  height: 400px;
+}
+.home-section .hero-container .hero-image {
+  height: 450px;
+  width: 100%;
+  background-color: black;
+}
+.home-section .categories-container {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 10px;
+}
+.home-section .categories-container ul {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 60%;
+}
+.home-section .categories-container ul li > a {
+  font-family: "Rethink Sans", sans-serif;
+  text-decoration: none;
+}
+
+.products-section {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.products-section .products-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.products-section .products-container h2 {
+  font-family: "Rethink Sans", sans-serif;
+}
+.products-section .products-container .products-content {
+  display: flex;
+  justify-content: center;
+  width: 400px;
+  font-family: "Rethink Sans", sans-serif;
+}
+.products-section .products-container .products-content ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  gap: 20px 20px;
+}
+.products-section .products-container .products-content ul li {
+  justify-content: center;
+}
+.products-section .products-container .products-content ul li img {
+  display: flex;
+  align-self: center;
+  justify-self: center;
+  width: 360px;
+  border-radius: 5px;
+}
+.products-section .products-container .products-content ul li .product-price {
+  font-family: "Rethink Sans", sans-serif;
+  font-style: italic;
+}
+
 * {
   margin: 0 auto;
   padding: 0;
@@ -86,7 +143,7 @@ table {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  width: 100%;
+  width: 97%;
   height: fit-content;
 }
 .header-section .nav-bar .nav-links-list {
@@ -99,20 +156,6 @@ table {
 .header-section .nav-bar .nav-links-list li > a {
   text-decoration: none;
   color: #000;
-}
-.header-section .categories-container {
-  display: flex;
-  justify-content: flex-start;
-  width: 100%;
-}
-.header-section .categories-container .category-links-list {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  width: 85%;
-}
-.header-section .categories-container .category-links-list li > a {
-  text-decoration: none;
 }
 
 /*# sourceMappingURL=App.css.map */
