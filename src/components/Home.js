@@ -1,49 +1,51 @@
 import {useEffect, useState} from "react";
-import {fetchCategory, fetchProducts} from "../api/productService";
+import {fetchCollections} from "../api/productService";
 import {Link, useParams} from "react-router-dom";
+import Categories from "./Categories";
 
 const Home = () => {
-    // const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
-    const {categoryId} = useParams();
+    const {collectionId} = useParams();
+    const [collections, setCollections] = useState([]);
 
     useEffect(() => {
-        // const fetchData = async () => {
-        //     try {
-        //         const data = categoryId
-        //             ? await fetchProducts(categoryId)
-        //             : await fetchProducts();
-        //         console.log(data);
-        //
-        //         if (categoryId) {
-        //             setProducts(data);
-        //         } else {
-        //             setCategories(data);
-        //         }
-        //     } catch (error) {
-        //         console.error('Error', error);
-        //     }
-        // };
-        const fetchAllCategories = async () => {
+        const fetchAllCollections = async () => {
             try {
-                let categoriesData;
-                if (categoryId) {
-                    categoriesData = await fetchCategory(categoryId);
-                    console.log("category specific action");
-                } else {
-                    categoriesData = await fetchCategory();
-                }
-
-                setCategories(categoriesData);
-                console.log(categoriesData);
+                const collectionData = await fetchCollections();
+                console.log(collectionData.collections.edges);
+                setCollections(collectionData.collections.edges);
             } catch (error) {
-                console.error('Error categories:', error);
+                console.error('Error fetching collections:', error);
             }
-        };
+        }
 
-        fetchAllCategories();
-        // fetchData();
-    }, [categoryId]);
+        fetchAllCollections();
+    }, [])
+
+    // useEffect(() => {
+    //     const fetchAllCategories = async () => {
+    //         try {
+    //             let categoriesData;
+    //             if (categoryId) {
+    //                 categoriesData = await fetchCategory(categoryId);
+    //                 console.log("category specific action");
+    //             } else {
+    //                 categoriesData = await fetchCategory();
+    //             }
+    //
+    //             setCategories(categoriesData);
+    //             console.log(categoriesData);
+    //         } catch (error) {
+    //             console.error('Error categories:', error);
+    //         }
+    //     };
+    //
+    //     fetchAllCategories();
+    // }, [categoryId]);
+
+    const handleCollectionClick = (collectionId) => {
+        console.log("Clicked on collection with collectionId:", collectionId);
+    }
 
     return (
         <section className="home-section">
@@ -57,14 +59,11 @@ const Home = () => {
             <div>
                 <h2>Categories</h2>
                 <ul>
-                    {categories?.map((category) => (
-                        <li key={category.id}>
-                            <Link to={`/categories/${category.id}`}>
-                                <img src={category.image}
-                                alt={category.name}
-                                style={{ width: "50px", height: "50px" }}
-                                />
-                                {category.name}
+                    {collections.map((category) => (
+                        <li key={category.node.id}>
+                            <Link to={`/categories/${encodeURIComponent(category.node.id)}`} onClick={() => handleCollectionClick(category.node.id)} >
+                                <img src={category.node.image.url} alt={category.node.title} style={{ width: "50px", height: "50px" }}/>
+                                {category.node.title}
                             </Link>
                         </li>
                     ))}
