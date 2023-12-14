@@ -15,25 +15,6 @@
       background-color: black;
     }
   }
-
-  .categories-container {
-    display: flex;
-    justify-content: flex-start;
-    width: 100%;
-    padding: 10px;
-
-    ul {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      width: 60%;
-
-      li > a {
-        font-family: $fontPrimary;
-        text-decoration: none;
-      }
-    }
-  }
 }
 
 .products-section {
@@ -81,9 +62,6 @@
           }
         }
       }
-
-
     }
   }
-
 }

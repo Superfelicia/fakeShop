@@ -67,22 +67,6 @@ table {
   width: 100%;
   background-color: black;
 }
-.home-section .categories-container {
-  display: flex;
-  justify-content: flex-start;
-  width: 100%;
-  padding: 10px;
-}
-.home-section .categories-container ul {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  width: 60%;
-}
-.home-section .categories-container ul li > a {
-  font-family: "Rethink Sans", sans-serif;
-  text-decoration: none;
-}
 
 .products-section {
   display: flex;
@@ -134,17 +118,23 @@ table {
 
 .header-section {
   display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
+  flex-direction: row;
+  justify-content: space-around;
   align-items: center;
   height: 85px;
+  width: 100vw;
 }
 .header-section .nav-bar {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   width: 97%;
   height: fit-content;
+}
+.header-section .nav-bar .menu-bars {
+  padding: 8px;
+  background: none;
+  color: black;
 }
 .header-section .nav-bar .nav-links-list {
   display: flex;
@@ -156,6 +146,64 @@ table {
 .header-section .nav-bar .nav-links-list li > a {
   text-decoration: none;
   color: #000;
+}
+.header-section .desktop-menu {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 90%;
+}
+.header-section .desktop-menu ul {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.header-section .desktop-menu ul li {
+  margin: 5px;
+  padding: 5px;
+}
+.header-section .desktop-menu ul li > a {
+  font-family: "Rethink Sans", sans-serif;
+  color: black;
+  text-decoration: none;
+}
+.header-section .desktop-menu ul li > a:hover {
+  text-decoration: underline;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 25%;
+  height: 100vh;
+  padding: 20px;
+  background-color: cadetblue;
+  position: fixed;
+  top: 0;
+  left: -100%;
+  transition: all 1s ease-in-out;
+}
+.sidebar-menu .menu-bars {
+  margin: 10px 0 10px 10px;
+  background: none;
+  color: black;
+}
+.sidebar-menu.active {
+  left: 0;
+  transition: all 0.5s ease-in-out;
+}
+.sidebar-menu ul li {
+  padding: 10px;
+}
+.sidebar-menu ul li > a {
+  font-family: "Rethink Sans", sans-serif;
+  text-decoration: none;
+  color: black;
+}
+.sidebar-menu ul li > a:hover {
+  text-decoration: underline;
 }
 
 /*# sourceMappingURL=App.css.map */
