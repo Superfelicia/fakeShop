@@ -1,3 +1,4 @@
+import productDetail from "../components/ProductDetail";
 
 export const fetchCollections = async () => {
     try {
@@ -36,4 +37,17 @@ export const fetchCollectionProducts = async (collectionId) => {
         console.error("Error fetching collections:", error);
     }
 };
+
+export const fetchProductDetails = async (productId) => {
+    try {
+        const request = await fetch(`https://mock.shop/api?query={product(id:%20%22${encodeURIComponent(productId)}%22){id%20title%20description%20featuredImage%20{id%20url}%20variants(first:%203){edges%20{cursor%20node%20{id%20title%20image%20{url}%20price%20{amount%20currencyCode}}}}}}`);
+        const response = await request.json();
+
+        const productDetails = response.data.product;
+        console.log(productDetails);
+        return productDetails;
+    } catch (error) {
+        console.error("Error fetching product details:", error);
+    }
+}
 

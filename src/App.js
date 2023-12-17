@@ -4,6 +4,8 @@ import Navbar from "./components/Navbar";
 import Home from "./components/Home";
 import Products from "./components/Products";
 import useMediaQuery from "./hooks/useMediaQuery";
+import CollectionsPage from "./components/CollectionsPage";
+import ProductDetail from "./components/ProductDetail";
 
 
 function App() {
@@ -14,10 +16,14 @@ function App() {
       <Router>
         <div>
           <Navbar isDesktop={isDesktop} isMobile={isMobile} />
-          <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/categories/:collectionId" element={<Products />} />
-          </Routes>
+            <div>
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/collections" element={<CollectionsPage />} />
+                    <Route path="/categories/:collectionId" element={<Products />} />
+                    <Route path="/products/:productId" element={<ProductDetail />} />
+                </Routes>
+            </div>
         </div>
       </Router>
   );

@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {fetchCollectionProducts} from "../api/productService";
 
 const Products = () => {
@@ -33,26 +33,24 @@ const Products = () => {
     }
 
     return (
-        <section className="products-section">
+        <div className="products-page">
+            <div className="products-title-container">
+                <h2>Collections category</h2>
+            </div>
             <div className="products-container">
-                {/*<h2>{collectionTitle}</h2>*/}
-                <div className="products-content">
-                    <ul>
                         {products?.map((product) => (
-                            <li key={product.node.id}>
+                            <div className="products-content">
+                            <Link key={product.node.id} className="product-link-content" to={`/products/${encodeURIComponent(product.node.id)}`}>
                                 {product.node.featuredImage && (
                                     <img src={product.node.featuredImage.url} alt={product.node.title} />
                                 )}
-                                <h3>{product.node.title}</h3>
-                                <p className="product-price">{product.node.variants.edges.cursor} {product.node.variants.edges[0].node.priceV2.amount} {product.node.variants.edges[0].node.priceV2.currencyCode}</p>
-                                {/*<p>{product.node.description}</p>*/}
-                            </li>
+                                <h3 className="products-name">{product.node.title}</h3>
+                                <p className="product-price">{product.node.variants.edges[0].node.priceV2.amount} {product.node.variants.edges[0].node.priceV2.currencyCode}</p>
+                            </Link>
+                            </div>
                         ))}
-                    </ul>
-                </div>
             </div>
-        </section>
-
+        </div>
     )
 }
 

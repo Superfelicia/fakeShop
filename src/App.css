@@ -68,46 +68,173 @@ table {
   background-color: black;
 }
 
-.products-section {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-.products-section .products-container {
+.products-page {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
-.products-section .products-container h2 {
-  font-family: "Rethink Sans", sans-serif;
-}
-.products-section .products-container .products-content {
+.products-page .products-title-container {
   display: flex;
   justify-content: center;
-  width: 400px;
-  font-family: "Rethink Sans", sans-serif;
+  align-items: center;
+  height: 150px;
 }
-.products-section .products-container .products-content ul {
+.products-page .products-title-container h2 {
+  font-family: "Rethink Sans", sans-serif;
+  font-size: 20px;
+}
+.products-page .products-container {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  width: 90%;
-  gap: 20px 20px;
+  gap: 10px;
 }
-.products-section .products-container .products-content ul li {
-  justify-content: center;
-}
-.products-section .products-container .products-content ul li img {
+.products-page .products-container .products-content {
   display: flex;
-  align-self: center;
-  justify-self: center;
-  width: 360px;
+  justify-content: center;
+  align-items: center;
+  width: 300px;
+  height: 360px;
+  font-family: "Rethink Sans", sans-serif;
+}
+.products-page .products-container .products-content img {
+  width: 300px;
+  height: 290px;
+  object-fit: cover;
   border-radius: 5px;
 }
-.products-section .products-container .products-content ul li .product-price {
+.products-page .products-container .products-content .product-link-content {
+  color: black;
+  text-decoration: none;
+  line-height: 1.4;
+}
+.products-page .products-container .products-content .product-link-content .products-name {
+  font-size: 18px;
+}
+.products-page .products-container .products-content .product-link-content .products-price {
   font-family: "Rethink Sans", sans-serif;
   font-style: italic;
+}
+
+.collections-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.collections-page .collections-title-container {
+  height: 120px;
+}
+.collections-page .collections-title-container h2 {
+  font-family: "Rethink Sans", sans-serif;
+  font-size: 30px;
+  margin: 30px;
+}
+.collections-page .collections-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  row-gap: 20px;
+  column-gap: 10px;
+  width: 100%;
+}
+.collections-page .collections-container .collection-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 340px;
+  height: 340px;
+  margin-bottom: 15px;
+}
+@media screen and (min-width: 520px) {
+  .collections-page .collections-container .collection-content {
+    width: 420px;
+    height: 420px;
+  }
+}
+@media screen and (min-width: 1020px) {
+  .collections-page .collections-container .collection-content {
+    width: 330px;
+    height: 330px;
+  }
+}
+.collections-page .collections-container .collection-content > a {
+  margin: 15px;
+  text-decoration: none;
+}
+.collections-page .collections-container .collection-content .collection-image {
+  width: 100%;
+  height: 100%;
+  min-height: 330px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+@media screen and (min-width: 520px) {
+  .collections-page .collections-container .collection-content .collection-image {
+    min-height: 380px;
+  }
+}
+@media screen and (min-width: 1020px) {
+  .collections-page .collections-container .collection-content .collection-image {
+    min-height: 310px;
+  }
+}
+.collections-page .collections-container .collection-content .collection-title {
+  display: flex;
+  align-items: center;
+  font-family: "Rethink Sans", sans-serif;
+  font-size: 18px;
+  color: black;
+  padding: 18px 0 18px 0;
+}
+.collections-page .collections-container .collection-content .collection-title svg {
+  margin-left: 5px;
+}
+
+.products-detail-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.products-detail-container .detail-content {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  width: 90%;
+}
+.products-detail-container .detail-content .detail-image-container {
+  width: 50%;
+  height: 500px;
+  padding: 20px;
+}
+.products-detail-container .detail-content .detail-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 5px;
+}
+.products-detail-container .detail-content .detail-description-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-start;
+  font-family: "Rethink Sans", sans-serif;
+  line-height: 1.2;
+  width: 50%;
+  height: 500px;
+  padding: 20px;
+}
+.products-detail-container .detail-content .detail-description-container .detail-text h2 {
+  font-size: 30px;
+  font-weight: bold;
 }
 
 * {
