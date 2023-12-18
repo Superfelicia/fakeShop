@@ -6,6 +6,7 @@ import Products from "./components/Products";
 import useMediaQuery from "./hooks/useMediaQuery";
 import CollectionsPage from "./components/CollectionsPage";
 import ProductDetail from "./components/ProductDetail";
+import Cart from "./components/Cart";
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
                     <Route path="/collections" element={<CollectionsPage />} />
                     <Route path="/categories/:collectionId" element={<Products />} />
                     <Route path="/products/:productId" element={<ProductDetail />} />
+                    <Route path="/cart" element={<Cart />} />
                 </Routes>
             </div>
         </div>

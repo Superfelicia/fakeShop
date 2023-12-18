@@ -1,10 +1,11 @@
 import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {fetchProductDetails} from "../api/productService";
+import {createCart, fetchProductDetails} from "../api/productService";
 
 const ProductDetail = () => {
     const {productId} = useParams();
     const [productDetail, setProductDetail] = useState(null);
+    const [selectedVariant, setSelectedVariant] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -13,6 +14,10 @@ const ProductDetail = () => {
                 console.log(productDetailsData)
                 setProductDetail(productDetailsData);
                 console.log(productDetail);
+
+                if (productDetailsData?.variants?.edges?.length === 1) {
+                    setSelectedVariant(productDetailsData.variants.edges[0].node);
+                }
             } catch (error) {
                 console.error('Error fetching product detail:', error);
             }
@@ -20,6 +25,28 @@ const ProductDetail = () => {
 
         fetchData();
     }, [productId]);
+
+    const handleVariantChange = (event) => {
+        const variantId = event.target.value;
+        const selectedVariant = productDetail.variants.edges.find(
+            (variant) => variant.node.id === variantId
+        );
+        setSelectedVariant(selectedVariant.node);
+    }
+
+    const handleAddToCart = async () => {
+        if (!selectedVariant) {
+            console.error("No variant selected");
+            return;
+        }
+
+        try {
+            const createdCart = await createCart(selectedVariant.id);
+            console.log("Cart created:", createdCart);
+        } catch (error) {
+            console.error('Error adding to cart:', error);
+        }
+    };
 
     if (!productDetail) {
         return <div>Loading...</div>;
@@ -34,28 +61,47 @@ const ProductDetail = () => {
                 <div className="detail-description-container">
                     <div className="detail-text">
                         <h2>{productDetail.title}</h2>
-                        <p>{productDetail.description}</p>
                     </div>
                     <div className="detail-price">
-                        <p>{productDetail.variants.edges[0].node.price.amount} {productDetail.variants.edges[0].node.price.currencyCode}</p>
-            {productDetail.variants && productDetail.variants.edges ? (
-                    <ul>
-                        {productDetail.variants.edges.map((variant) => (
-                            <li key={variant.node.id}>
-                                <p>Title: {variant.node.title}</p>
-                                {variant.node.image && (
-                                    <img src={variant.node.image.url}
-                                         alt={productDetail.title + ' ' + variant.node.title}
-                                         style={{ width: "200px" }}
-                                    />
-                                )}
-                            </li>
+                        <p>${productDetail.variants.edges[0].node.price.amount} {productDetail.variants.edges[0].node.price.currencyCode}</p>
+                    </div>
+                    <div>
+                        {productDetail.variants && productDetail.variants.edges.map((variant) => (
+                            <label key={variant.node.id}>
+                                <input
+                                    type="radio"
+                                    name="variant"
+                                    value={variant.node.id}
+                                    checked={selectedVariant && selectedVariant.id === variant.node.id}
+                                    onChange={handleVariantChange}
+                                />
+                                {variant.node.title}
+                            </label>
                         ))}
-                    </ul>
-            ):(
-                <p>No variants available</p>
-            )}
-                </div>
+                    </div>
+            {/*{productDetail.variants && productDetail.variants.edges ? (*/}
+            {/*        <ul>*/}
+            {/*            {productDetail.variants.edges.map((variant) => (*/}
+            {/*                <li key={variant.node.id}>*/}
+            {/*                    <p>Title: {variant.node.title}</p>*/}
+            {/*                    /!*{variant.node.image && (*!/*/}
+            {/*                    /!*    <img src={variant.node.image.url}*!/*/}
+            {/*                    /!*         alt={productDetail.title + ' ' + variant.node.title}*!/*/}
+            {/*                    /!*         style={{ width: "200px" }}*!/*/}
+            {/*                    /!*    />*!/*/}
+            {/*                    /!*)}*!/*/}
+            {/*                </li>*/}
+            {/*            ))}*/}
+            {/*        </ul>*/}
+            {/*):(*/}
+            {/*    <p>No variants available</p>*/}
+            {/*)}*/}
+                    <div className="detail-size">
+                        <button onClick={() => handleAddToCart()}>Add to cart</button>
+                    </div>
+                    <div className="detail-text">
+                        <p>{productDetail.description}</p>
+                    </div>
                 </div>
             </div>
         </div>

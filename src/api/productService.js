@@ -51,3 +51,125 @@ export const fetchProductDetails = async (productId) => {
     }
 }
 
+export const createCart = async (variantId) => {
+    try {
+        const body = {
+            query: `
+        mutation CartCreate {
+          cartCreate(
+            input: {
+              lines: [
+                {
+                  quantity: 1
+                  merchandiseId: "${variantId}"
+                }
+              ]
+            }
+          ) {
+            cart {
+              id
+              createdAt
+              updatedAt
+              lines(first: 10) {
+                edges {
+                  node {
+                    id
+                    merchandise {
+                      ... on ProductVariant {
+                        id
+                        title
+                        image {
+                          id
+                          url
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              cost {
+                totalAmount {
+                  amount
+                  currencyCode
+                }
+                subtotalAmount {
+                  amount
+                  currencyCode
+                }
+              }
+            }
+          }
+        }
+      `,
+        };
+
+        const request = await fetch('https://mock.shop/api', {
+            method: "POST",
+            body: JSON.stringify(body),
+            headers: {
+                "content-type": "application/json"
+            },
+        });
+
+        const response = await request.json();
+        return response.data.cartCreate.cart; // Return the created cart
+    } catch (error) {
+        console.error('Error creating cart:', error);
+        throw error; // Rethrow the error for the caller to handle
+    }
+};
+
+export const fetchCart = async () => {
+    try {
+        const response = await fetch('https://mock.shop/api', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query: `
+          {
+            cart {
+              id
+              createdAt
+              updatedAt
+              lines(first: 10) {
+                edges {
+                  node {
+                    id
+                    merchandise {
+                      ... on ProductVariant {
+                        id
+                        title
+                        price {
+                          amount
+                          currencyCode
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              cost {
+                totalAmount {
+                  amount
+                  currencyCode
+                }
+              }
+            }
+          }
+        `,
+            }),
+        });
+
+        const data = await response.json();
+
+        return data.data.cart;
+    } catch (error) {
+        console.error('Error fetching cart:', error);
+        throw error;
+    }
+};
+
+
+
