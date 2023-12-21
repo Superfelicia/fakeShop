@@ -1,11 +1,16 @@
-import {useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {createCart, fetchProductDetails} from "../api/productService";
+import {createCart, fetchCart, fetchProductDetails} from "../api/productService";
+import Cart from "./Cart";
+import {useCart} from "../hooks/CartContext";
 
 const ProductDetail = () => {
     const {productId} = useParams();
     const [productDetail, setProductDetail] = useState(null);
     const [selectedVariant, setSelectedVariant] = useState(null);
+    const { updateCartId } = useCart();
+    const {cartId} = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -41,8 +46,24 @@ const ProductDetail = () => {
         }
 
         try {
-            const createdCart = await createCart(selectedVariant.id);
-            console.log("Cart created:", createdCart);
+            if (!cartId) {
+                const createdCart = await createCart(selectedVariant.id);
+                console.log("Cart created:", createdCart);
+                if (createdCart) {
+                    updateCartId(createdCart.id);
+                    navigate(`/cart/${encodeURIComponent(createdCart.id)}`);
+                } else {
+                    console.error("Error creating cart: No cart data returned");
+                }
+            } else {
+                const existingCart = await fetchCart(cartId);
+                console.log("Existing cart:", existingCart);
+
+                if (!existingCart) {
+                    console.error("Error fetching existing cart: No cart data returned");
+                }
+            }
+
         } catch (error) {
             console.error('Error adding to cart:', error);
         }
@@ -98,6 +119,9 @@ const ProductDetail = () => {
             {/*)}*/}
                     <div className="detail-size">
                         <button onClick={() => handleAddToCart()}>Add to cart</button>
+                        <Link to={`/cart/${updateCartId}`}>
+                            <button>Go to cart</button>
+                        </Link>
                     </div>
                     <div className="detail-text">
                         <p>{productDetail.description}</p>

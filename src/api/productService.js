@@ -1,4 +1,3 @@
-import productDetail from "../components/ProductDetail";
 
 export const fetchCollections = async () => {
     try {
@@ -10,20 +9,6 @@ export const fetchCollections = async () => {
         console.error("Error fetching collections:", error);
     }
 };
-
-// export const fetchCollectionProducts = async (collectionId) => {
-//     try {
-//         const encodedCollectionId = encodeURIComponent(collectionId);
-//         const request = await fetch(`https://mock.shop/api?query={collection(id:%20%22${encodedCollectionId}%22){products(first:%2020){edges%20{node%20{id%20title%20featuredImage%20{id%20url}}}}}}`);
-//         const response = await request.json();
-//
-//         const products = response.data.collection.products.edges;
-//         // console.log(products);
-//         return products;
-//     } catch (error) {
-//         console.error("Error fetching collections:", error);
-//     }
-// };
 
 export const fetchCollectionProducts = async (collectionId) => {
     try {
@@ -119,57 +104,77 @@ export const createCart = async (variantId) => {
     }
 };
 
-export const fetchCart = async () => {
+export const fetchCart = async (cartId) => {
     try {
-        const response = await fetch('https://mock.shop/api', {
+        const query = `
+            query GetCart($cartId: ID!) {
+                cart(id: $cartId) {
+                    id
+                    createdAt
+                    updatedAt
+                    lines(first: 10) {
+                        edges {
+                            node {
+                                id
+                                merchandise {
+                                    ... on ProductVariant {
+                                        id
+                                        title
+                                        image {
+                                            id
+                                            url
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    cost {
+                        totalAmount {
+                            amount
+                            currencyCode
+                        }
+                        subtotalAmount {
+                            amount
+                            currencyCode
+                        }
+                    }
+                }
+            }
+        `;
+
+        const variables = {
+            cartId: cartId,
+        };
+
+        const url = 'https://mock.shop/api';
+        const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                query: `
-          {
-            cart {
-              id
-              createdAt
-              updatedAt
-              lines(first: 10) {
-                edges {
-                  node {
-                    id
-                    merchandise {
-                      ... on ProductVariant {
-                        id
-                        title
-                        price {
-                          amount
-                          currencyCode
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-              cost {
-                totalAmount {
-                  amount
-                  currencyCode
-                }
-              }
-            }
-          }
-        `,
+                query: query,
+                variables: variables,
             }),
         });
 
+        console.log(url);
+
         const data = await response.json();
 
-        return data.data.cart;
+        if (data.errors) {
+            console.log('GraphQL errors:', data.errors);
+        }
+
+        if (data && data.data && data.data.cart) {
+            return data.data.cart;
+        } else {
+            console.error("Cart not found in data:", data);
+            return null;
+        }
     } catch (error) {
         console.error('Error fetching cart:', error);
         throw error;
     }
 };
-
-
-

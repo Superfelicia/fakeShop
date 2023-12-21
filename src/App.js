@@ -7,6 +7,7 @@ import useMediaQuery from "./hooks/useMediaQuery";
 import CollectionsPage from "./components/CollectionsPage";
 import ProductDetail from "./components/ProductDetail";
 import Cart from "./components/Cart";
+import {CartProvider} from "./hooks/CartContext";
 
 
 function App() {
@@ -15,18 +16,20 @@ function App() {
 
   return (
       <Router>
-        <div>
-          <Navbar isDesktop={isDesktop} isMobile={isMobile} />
-            <div>
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/collections" element={<CollectionsPage />} />
-                    <Route path="/categories/:collectionId" element={<Products />} />
-                    <Route path="/products/:productId" element={<ProductDetail />} />
-                    <Route path="/cart" element={<Cart />} />
-                </Routes>
-            </div>
-        </div>
+          <CartProvider>
+              <div>
+                  <Navbar isDesktop={isDesktop} isMobile={isMobile} />
+                  <div>
+                      <Routes>
+                          <Route path="/" element={<Home />} />
+                          <Route path="/collections" element={<CollectionsPage />} />
+                          <Route path="/categories/:collectionId" element={<Products />} />
+                          <Route path="/products/:productId" element={<ProductDetail />} />
+                          <Route path="/cart/:cartId" element={<Cart />} />
+                      </Routes>
+                  </div>
+              </div>
+          </CartProvider>
       </Router>
   );
 }
