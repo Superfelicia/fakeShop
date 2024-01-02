@@ -36,59 +36,62 @@ export const fetchProductDetails = async (productId) => {
     }
 }
 
-export const createCart = async (variantId) => {
+export const createCart = async (variantIds) => {
     try {
+        const lines = variantIds.map(variantId => ({
+            quantity: 1,
+            merchandiseId: variantId,
+        }));
+
         const body = {
             query: `
-        mutation CartCreate {
-          cartCreate(
-            input: {
-              lines: [
-                {
-                  quantity: 1
-                  merchandiseId: "${variantId}"
-                }
-              ]
-            }
-          ) {
-            cart {
-              id
-              createdAt
-              updatedAt
-              lines(first: 10) {
-                edges {
-                  node {
-                    id
-                    merchandise {
-                      ... on ProductVariant {
-                        id
-                        title
-                        image {
-                          id
-                          url
+                mutation CartCreate($lines: [CartLineInput!]!) {
+                    cartCreate(
+                        input: {
+                            lines: $lines
                         }
-                      }
+                    ) {
+                        cart {
+                            id
+                            createdAt
+                            updatedAt
+                            lines(first: 10) {
+                                edges {
+                                    node {
+                                        id
+                                        merchandise {
+                                            ... on ProductVariant {
+                                                id
+                                                title
+                                                image {
+                                                    id
+                                                    url
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            cost {
+                                totalAmount {
+                                    amount
+                                    currencyCode
+                                }
+                                subtotalAmount {
+                                    amount
+                                    currencyCode
+                                }
+                            }
+                        }
                     }
-                  }
                 }
-              }
-              cost {
-                totalAmount {
-                  amount
-                  currencyCode
-                }
-                subtotalAmount {
-                  amount
-                  currencyCode
-                }
-              }
-            }
-          }
-        }
-      `,
+            `,
+            variables: {
+                lines: lines,
+            },
         };
 
-        const request = await fetch('https://mock.shop/api', {
+        const response = await fetch('https://mock.shop/api', {
             method: "POST",
             body: JSON.stringify(body),
             headers: {
@@ -96,11 +99,21 @@ export const createCart = async (variantId) => {
             },
         });
 
-        const response = await request.json();
-        return response.data.cartCreate.cart; // Return the created cart
+        const responseData = await response.json();
+        console.log('Full response:', responseData);
+
+        if (responseData.errors) {
+            console.error('GraphQL errors:', responseData.errors);
+            throw new Error('GraphQL error');
+        } else if (!responseData.data) {
+            console.error('No data returned:', responseData);
+            throw new Error('No data returned from GraphQL');
+        }
+
+        return responseData.data.cartCreate.cart;
     } catch (error) {
         console.error('Error creating cart:', error);
-        throw error; // Rethrow the error for the caller to handle
+        throw error;
     }
 };
 
@@ -158,8 +171,6 @@ export const fetchCart = async (cartId) => {
                 variables: variables,
             }),
         });
-
-        console.log(url);
 
         const data = await response.json();
 
