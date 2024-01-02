@@ -1,32 +1,45 @@
 import {Link, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {fetchProductDetails} from "../api/productService";
+import {fetchCart, fetchProductDetails} from "../api/productService";
 import {useCart} from "../hooks/CartContext";
+import cart from "./Cart";
 
 const ProductDetail = () => {
     const {productId} = useParams();
     const [productDetail, setProductDetail] = useState(null);
     const [selectedVariant, setSelectedVariant] = useState(null);
-    const { cartId } = useCart();
+    const { cartId, updateCartId } = useCart();
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const productDetailsData = await fetchProductDetails(productId);
-                console.log(productDetailsData)
+                console.log(productDetailsData);
                 setProductDetail(productDetailsData);
                 console.log(productDetail);
 
                 if (productDetailsData?.variants?.edges?.length === 1) {
                     setSelectedVariant([productDetailsData.variants.edges[0].node]);
                 }
+
+                if (!cartId || cartId !== productDetailsData?.cartId) {
+                    if (productDetailsData?.cartId) {
+                        updateCartId(productDetailsData.cartId);
+                    } else {
+                        console.error("Unable to fetch cartId from product details.");
+                    }
+                }
+
+                const cartData = await fetchCart(cartId);
+                console.log(cartData);
+
             } catch (error) {
                 console.error('Error fetching product detail:', error);
             }
         }
 
         fetchData();
-    }, [productId]);
+    }, [productId, cartId, updateCartId]);
 
     const handleVariantChange = (event) => {
         const variantId = event.target.value;
@@ -47,8 +60,8 @@ const ProductDetail = () => {
             productsInCart.push(variantId);
             localStorage.setItem("productsInCart", JSON.stringify(productsInCart));
 
-            alert("Produkt tillagd i kundvagnen");
-            console.log(productsInCart);
+            updateCartId(cartId);
+            console.log("Produkt tillagd i kundvagnen", productsInCart);
 
         } catch (error) {
             console.error('Error adding to cart:', error);
@@ -105,9 +118,11 @@ const ProductDetail = () => {
             {/*)}*/}
                     <div className="detail-size">
                         <button onClick={() => handleAddToCart()}>Add to cart</button>
-                        <Link to={`/cart/${encodeURIComponent(cartId)}`}>
-                            <button>Go to cart</button>
-                        </Link>
+                        {cartId && (
+                            <Link to={`/cart/${encodeURIComponent(cartId)}`}>
+                                <button>Go to cart</button>
+                            </Link>
+                        )}
                     </div>
                     <div className="detail-text">
                         <p>{productDetail.description}</p>

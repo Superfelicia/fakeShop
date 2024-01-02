@@ -1,29 +1,32 @@
 import {useEffect, useState} from "react";
-import {fetchCart} from "../api/productService";
-import {useParams} from "react-router-dom";
+import {createCart, fetchCart} from "../api/productService";
 import {useCart} from "../hooks/CartContext";
 
 const Cart = () => {
     const [cartData, setCartData] = useState(null);
     const [loading, setLoading] = useState(true);
-    const { updateCartId } = useCart();
-    const { cartId } = useParams();
+    const { cartId, updateCartId } = useCart();
 
     useEffect(() => {
-        const loadCart = async () => {
+        const createOrloadCart = async () => {
+            setLoading(true);
             try {
-                setLoading(true);
-                console.log('Loading cart with id:', cartId);
-                const decodedCartId = decodeURIComponent(cartId);
-                console.log('Formatted cartId:', decodedCartId);
-                const data = await fetchCart(decodedCartId);
-
-                if (data) {
-                    console.log(data);
-                    updateCartId(decodedCartId);
-                    setCartData(data);
+                if (!cartId) {
+                    // skapa ny cart
+                    const storedVariantIds = JSON.parse(localStorage.getItem('productsInCart')) || [];
+                    if (storedVariantIds.length > 0) {
+                        const createdCart = await createCart(storedVariantIds);
+                        if (createdCart) {
+                            updateCartId(createdCart.id);
+                            setCartData(createdCart);
+                            // localStorage.removeItem('productsInCart');
+                        }
+                    }
                 } else {
-                    console.error("No cart data found");
+                    // hämta befintlig cart
+                    const existingCart = await fetchCart(cartId);
+                    console.log(existingCart, cartId);
+                    setCartData(existingCart);
                 }
             } catch (error) {
                 console.error("Error fetching cartData:", error);
@@ -32,7 +35,7 @@ const Cart = () => {
             }
         };
 
-        loadCart();
+        createOrloadCart();
     }, [cartId, updateCartId]);
 
     if (!cartId) {
@@ -51,16 +54,12 @@ const Cart = () => {
         <div>
             <h2>Your cart</h2>
             <ul>
-                {cartData.lines.edges.map((line) => {
-                    if (line.node.merchandise.price)
-                    return <li key={line.node.id}>
+                {cartData.lines.edges.map((line) => (
+                    <li key={line.node.id}>
                         <p>{line.node.merchandise.title}</p>
-                        <p>
-                            Price: ${line.node.merchandise.price.amount}
-                            {line.node.price.currencyCode}
-                        </p>
+                        <img className="detail-image-container" src={line.node.merchandise.image.url} />
                     </li>
-                })}
+                ))}
             </ul>
             {cartData.cost && cartData.cost.totalAmount && (
                 <p>

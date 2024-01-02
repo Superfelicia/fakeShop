@@ -3,10 +3,12 @@ import {FaBars, FaHeart, FaUser, FaWindowClose} from "react-icons/fa";
 import {FaCartShopping} from "react-icons/fa6";
 import {useEffect, useState} from "react";
 import {fetchCollections} from "../api/productService";
+import {useCart} from "../hooks/CartContext";
 
 const Navbar = ({ isDesktop, isMobile }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [collections, setCollections] = useState([]);
+    const { cartId } = useCart();
 
     useEffect(() => {
         const fetchAllCollections = async () => {
@@ -87,7 +89,7 @@ const Navbar = ({ isDesktop, isMobile }) => {
                         </Link>
                     </li>
                     <li>
-                        <Link to="/cart">
+                        <Link to={`/cart/${cartId}`}>
                             <FaCartShopping />
                         </Link>
                     </li>
