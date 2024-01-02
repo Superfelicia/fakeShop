@@ -117,6 +117,75 @@ export const createCart = async (variantIds) => {
     }
 };
 
+export const addProductsToCart = async (cartId, productsToAdd) => {
+    // skapa body för GraphQL-anropet
+    try {
+        const lines = productsToAdd.map(product => ({
+            quantity: 1,
+            merchandiseId: product,
+        }));
+
+    const body = {
+        query: `
+        mutation($cartId: ID!, $lines: [CartLineInput!]!) {
+            cartLinesAdd(cartId: $cartId, lines: $lines) {
+                cart {
+                    id
+                    createdAt
+                    updatedAt
+                    lines(first: 10) {
+                        edges {
+                            node {
+                                id
+                                merchandise {
+                                    ... on ProductVariant {
+                                        id
+                                        title
+                                        image {
+                                            id
+                                            url
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    cost {
+                        totalAmount {
+                            amount
+                            currencyCode
+                        }
+                        subtotalAmount {
+                            amount
+                            currencyCode
+                        }
+                    }
+                }
+            }
+        }`,
+        variables: {
+            cartId: cartId,
+            lines: lines,
+        }
+    };
+
+    const request = await fetch('https://mock.shop/api', {
+        method: "POST",
+        body: JSON.stringify(body),
+        headers: {
+            "content-type": "application/json"
+        },
+    });
+
+    const response = await request.json();
+    console.log(response);
+
+    } catch (error) {
+        console.error("Error adding products to cart:", error);
+    }
+};
+
+
 export const fetchCart = async (cartId) => {
     try {
         const query = `
@@ -186,6 +255,53 @@ export const fetchCart = async (cartId) => {
         }
     } catch (error) {
         console.error('Error fetching cart:', error);
+        throw error;
+    }
+};
+
+export const removeFromCart = async (cartId, lineId) => {
+    try {
+        const mutation = `
+            mutation($cartId: ID!, $lineId: ID!) {
+                cartLinesRemove(
+                    cartId: $cartId
+                    lineIds: [$lineId]
+                ) {
+                    cart {
+                        id
+                        totalQuantity
+                    }
+                }
+            }
+        `;
+
+        const variables = {
+            cartId: cartId,
+            lineId: lineId,
+        };
+
+        const url = 'https://mock.shop/api';
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query: mutation,
+                variables: variables,
+            }),
+        });
+
+        const data = await response.json();
+
+        if (data.errors) {
+            console.error('GraphQL errors:', data.errors);
+            return false;
+        }
+
+        return data.data.cartLinesRemove.cart;
+    } catch (error) {
+        console.error('Error removing product from cart:', error);
         throw error;
     }
 };

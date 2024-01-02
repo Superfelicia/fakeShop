@@ -8,7 +8,7 @@ import {useCart} from "../hooks/CartContext";
 const Navbar = ({ isDesktop, isMobile }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [collections, setCollections] = useState([]);
-    const { cartId } = useCart();
+    const { cartId, updateCartId } = useCart();
 
     useEffect(() => {
         const fetchAllCollections = async () => {
@@ -22,7 +22,14 @@ const Navbar = ({ isDesktop, isMobile }) => {
         }
 
         fetchAllCollections();
-    }, [])
+
+        if (!cartId) {
+            const storedCartId = localStorage.getItem('cartId');
+            if (storedCartId) {
+                updateCartId(storedCartId);
+            }
+        }
+    }, [cartId, updateCartId]);
 
     const handleCollectionClick = (collectionId) => {
         console.log("Clicked on collection with collectionId:", collectionId);
@@ -89,7 +96,7 @@ const Navbar = ({ isDesktop, isMobile }) => {
                         </Link>
                     </li>
                     <li>
-                        <Link to={`/cart/${cartId}`}>
+                        <Link to={cartId ? `/cart/${encodeURIComponent(cartId)}` : '/cart'}>
                             <FaCartShopping />
                         </Link>
                     </li>
