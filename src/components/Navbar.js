@@ -96,7 +96,7 @@ const Navbar = ({ isDesktop, isMobile }) => {
                         </Link>
                     </li>
                     <li>
-                        <Link to={cartId ? `/cart/${encodeURIComponent(cartId)}` : '/cart'}>
+                        <Link to={`/cart/${encodeURIComponent(cartId)}`}>
                             <FaCartShopping />
                         </Link>
                     </li>
