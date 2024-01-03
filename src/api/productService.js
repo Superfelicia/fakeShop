@@ -259,7 +259,7 @@ export const fetchCart = async (cartId) => {
     }
 };
 
-export const removeFromCart = async (cartId, lineId) => {
+export const removeFromCart = async (cartId, lineIdToRemove) => {
     try {
         const mutation = `
             mutation($cartId: ID!, $lineId: ID!) {
@@ -277,29 +277,29 @@ export const removeFromCart = async (cartId, lineId) => {
 
         const variables = {
             cartId: cartId,
-            lineId: lineId,
+            lineId: lineIdToRemove,
         };
 
-        const url = 'https://mock.shop/api';
-        const response = await fetch(url, {
+        const request = await fetch('https://mock.shop/api', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
             body: JSON.stringify({
                 query: mutation,
                 variables: variables,
             }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
         });
 
-        const data = await response.json();
+        const response = await request.json();
+        console.log("Remove from cart response:", response);
 
-        if (data.errors) {
-            console.error('GraphQL errors:', data.errors);
+        if (response.errors) {
+            console.error('GraphQL errors:', response.errors);
             return false;
         }
 
-        return data.data.cartLinesRemove.cart;
+        return response.data.cartLinesRemove.cart;
     } catch (error) {
         console.error('Error removing product from cart:', error);
         throw error;
