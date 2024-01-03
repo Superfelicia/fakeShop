@@ -39,7 +39,7 @@ const Products = () => {
             </div>
             <div className="products-container">
                         {products?.map((product) => (
-                            <div className="products-content">
+                            <div key={product.node.id} className="products-content">
                             <Link key={product.node.id} className="product-link-content" to={`/products/${encodeURIComponent(product.node.id)}`}>
                                 {product.node.featuredImage && (
                                     <img src={product.node.featuredImage.url} alt={product.node.title} />
