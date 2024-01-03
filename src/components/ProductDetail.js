@@ -16,14 +16,17 @@ const ProductDetail = () => {
                 const productDetailsData = await fetchProductDetails(productId);
                 console.log(productDetailsData);
                 setProductDetail(productDetailsData);
-                console.log(productDetail);
+                // console.log(productDetail);
 
                 if (productDetailsData?.variants?.edges?.length === 1) {
                     setSelectedVariant([productDetailsData.variants.edges[0].node]);
                 }
 
-                if (!cartId || cartId !== productDetailsData?.cartId) {
-                    if (productDetailsData?.cartId) {
+                // om productDetailsData & -:-.cartId finns
+                if (productDetailsData && productDetailsData.cartId) {
+                    // om cartId är falsy eller inte matchar cartId på productDetailsData
+                    if (!cartId || cartId !== productDetailsData?.cartId) {
+                        console.log("cartId found on productDetailsData", productDetailsData.cartId);
                         updateCartId(productDetailsData.cartId);
                     } else {
                         console.error("Unable to fetch cartId from product details.");
@@ -31,7 +34,7 @@ const ProductDetail = () => {
                 }
 
                 const cartData = await fetchCart(cartId);
-                console.log(cartData);
+                console.log("cartId from fetchedCart:", cartData);
 
             } catch (error) {
                 console.error('Error fetching product detail:', error);
