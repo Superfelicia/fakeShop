@@ -1,6 +1,6 @@
 import {Link, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {fetchCart, fetchProductDetails} from "../api/productService";
+import {createCart, fetchCart, fetchProductDetails} from "../api/productService";
 import {useCart} from "../hooks/CartContext";
 
 const ProductDetail = () => {
@@ -59,14 +59,26 @@ const ProductDetail = () => {
 
         try {
             const variantId = selectedVariant.id;
-            const productsInCart = JSON.parse(localStorage.getItem('productsInCart')) || [];
-            productsInCart.push(variantId);
-            localStorage.setItem("productsInCart", JSON.stringify(productsInCart));
 
+            const existingProductsInCart = JSON.parse(localStorage.getItem('productsInCart')) || [];
+            console.log("Before adding to cart:", existingProductsInCart);
+
+
+            // kolla om produkten redan finns i cart
+            const existingProductIndex = existingProductsInCart.findIndex(product => product.variantId === variantId);
+
+            if (existingProductIndex !== -1) {
+                // produkten finns redan i cart, öka quantity
+                existingProductsInCart[existingProductIndex].quantity += 1;
+            } else {
+                // produkten finns inte, lägg till en ny
+                existingProductsInCart.push({ variantId, quantity: 1 });
+            }
+
+            localStorage.setItem("productsInCart", JSON.stringify(existingProductsInCart));
+            updateCartItems(existingProductsInCart);
             updateCartId(cartId);
-            updateCartItems(productsInCart);
-            console.log(updateCartItems);
-            console.log("Product added to cart", productsInCart);
+            console.log("Product added to cart", existingProductsInCart);
         } catch (error) {
             console.error('Error adding to cart:', error);
         }

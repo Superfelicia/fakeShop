@@ -16,7 +16,7 @@ export const fetchCollectionProducts = async (collectionId) => {
         const response = await request.json();
 
         const products = response.data.collection.products.edges;
-        console.log(products);
+        // console.log(products);
         return products;
     } catch (error) {
         console.error("Error fetching collections:", error);
@@ -29,7 +29,7 @@ export const fetchProductDetails = async (productId) => {
         const response = await request.json();
 
         const productDetails = response.data.product;
-        console.log(productDetails);
+        // console.log(productDetails);
         return productDetails;
     } catch (error) {
         console.error("Error fetching product details:", error);
@@ -121,8 +121,8 @@ export const addProductsToCart = async (cartId, productsToAdd) => {
     // skapa body för GraphQL-anropet
     try {
         const lines = productsToAdd.map(product => ({
-            quantity: 1,
-            merchandiseId: product,
+            quantity: product.quantity,
+            merchandiseId: `${product.variantId}`,
         }));
 
     const body = {
@@ -133,12 +133,16 @@ export const addProductsToCart = async (cartId, productsToAdd) => {
                     id
                     createdAt
                     updatedAt
-                    lines(first: 10) {
+                    lines(first: 50) {
                         edges {
                             node {
                                 id
                                 merchandise {
                                     ... on ProductVariant {
+                                    price {
+                                    amount
+                                    currencyCode
+                                    }
                                         id
                                         title
                                         image {
@@ -194,12 +198,17 @@ export const fetchCart = async (cartId) => {
                     id
                     createdAt
                     updatedAt
-                    lines(first: 10) {
+                    lines(first: 50) {
                         edges {
                             node {
                                 id
+                                quantity
                                 merchandise {
                                     ... on ProductVariant {
+                                    price {
+                                    amount
+                                    currencyCode
+                                    }
                                         id
                                         title
                                         image {
@@ -259,13 +268,16 @@ export const fetchCart = async (cartId) => {
     }
 };
 
-export const removeFromCart = async (cartId, lineIdToRemove) => {
+export const updateQuantityInCart = async (cartId, lineIdToUpdate, newQuantity) => {
     try {
         const mutation = `
-            mutation($cartId: ID!, $lineId: ID!) {
-                cartLinesRemove(
+            mutation($cartId: ID!, $lineId: ID!, $quantity: Int!) {
+                cartLinesUpdate(
                     cartId: $cartId
-                    lineIds: [$lineId]
+                    lines: [{
+                    id: $lineId
+                    quantity: $quantity
+                    }]
                 ) {
                     cart {
                         id
@@ -277,7 +289,8 @@ export const removeFromCart = async (cartId, lineIdToRemove) => {
 
         const variables = {
             cartId: cartId,
-            lineId: lineIdToRemove,
+            lineId: lineIdToUpdate,
+            quantity: newQuantity,
         };
 
         const request = await fetch('https://mock.shop/api', {
@@ -292,16 +305,16 @@ export const removeFromCart = async (cartId, lineIdToRemove) => {
         });
 
         const response = await request.json();
-        console.log("Remove from cart response:", response);
+        console.log("Update quantity in cart response:", response);
 
         if (response.errors) {
             console.error('GraphQL errors:', response.errors);
             return false;
         }
 
-        return response.data.cartLinesRemove.cart;
+        return response.data.cartLinesUpdate.cart;
     } catch (error) {
-        console.error('Error removing product from cart:', error);
+        console.error('Error updating product quantity from cart:', error);
         throw error;
     }
 };

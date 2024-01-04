@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {addProductsToCart, createCart, fetchCart, removeFromCart} from "../api/productService";
+import {addProductsToCart, createCart, fetchCart, updateQuantityInCart} from "../api/productService";
 import {useCart} from "../hooks/CartContext";
 
 const Cart = () => {
@@ -22,7 +22,6 @@ const Cart = () => {
                         updateCartId(createdCart.id);
                         setCartData(createdCart);
                         localStorage.setItem('cartId', createdCart.id);
-                        console.log("current cartId:", currentCartId);
                     }
                 } else if (currentCartId) {
                     // hämta befintlig cart om cartId finns
@@ -34,7 +33,10 @@ const Cart = () => {
                     if (storedVariantIds.length > 0) {
                         await addProductsToCart(currentCartId, storedVariantIds);
                         const updatedCart = await fetchCart(currentCartId);
-                        setCartData(updatedCart);
+                        console.log("Updated cart:", updatedCart);
+                        if (updatedCart) {
+                            setCartData(updatedCart);
+                        }
                     }
                 }
 
@@ -50,9 +52,11 @@ const Cart = () => {
         createOrloadCart();
     }, [cartId, updateCartId]);
 
-    const handleRemoveFromCart = async (lineIdToRemove) => {
+    const handleUpdateCart = async (lineIdToUpdate, currentQuantity) => {
+
+        const newQuantity = currentQuantity -1;
         try {
-            const response = await removeFromCart(cartId, lineIdToRemove);
+            const response = await updateQuantityInCart(cartId, lineIdToUpdate, newQuantity);
             console.log("Remove from cart response:", response);
 
             if (response && response.id) {
@@ -92,7 +96,9 @@ const Cart = () => {
                     <li key={line.node.id}>
                         <p>{line.node.merchandise.title}</p>
                         <img className="detail-image-container" src={line.node.merchandise.image.url} />
-                        <button onClick={() => handleRemoveFromCart(line.node.id)}>
+                        <p>{line.node.merchandise.price.amount} {line.node.merchandise.price.currencyCode}</p>
+                        <p>{line.node.quantity}</p>
+                        <button onClick={() => handleUpdateCart(line.node.id, line.node.quantity)}>
                             Remove from cart
                         </button>
                     </li>
