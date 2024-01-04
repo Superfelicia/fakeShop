@@ -24,7 +24,7 @@
     justify-content: space-between;
     align-items: center;
     width: 97%;
-    height: fit-content;
+    height: 100%;
 
     .menu-bars {
       padding: 8px;
@@ -32,17 +32,38 @@
       color: black;
     }
 
-    .nav-links-list {
+    .nav-links-container {
       display: flex;
+      flex-direction: row-reverse;
+      align-items: center;
+      height: 100%;
 
-      li {
-        margin: 0 10px;
-        list-style: none;
+      .nav-links-list {
+        display: flex;
+
+        li {
+          margin: 0 10px;
+          list-style: none;
+
+          > a {
+            text-decoration: none;
+            color: #000;
+          }
+        }
       }
 
-      li > a {
-        text-decoration: none;
-        color: #000;
+      @keyframes pulse {
+        50% {
+          transform: scale(2);
+          transform-origin: center center;
+          color: blue;
+        }
+      }
+
+      .cart-item-count {
+        &.pulse {
+          animation: pulse 1s infinite;
+        }
       }
     }
   }

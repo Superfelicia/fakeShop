@@ -8,7 +8,8 @@ import {useCart} from "../hooks/CartContext";
 const Navbar = ({ isDesktop, isMobile }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [collections, setCollections] = useState([]);
-    const { cartId, updateCartId } = useCart();
+    const { cartId, updateCartId, cartItems } = useCart();
+    const [isCartUpdated, setIsCartUpdated] = useState(false);
 
     useEffect(() => {
         const fetchAllCollections = async () => {
@@ -37,6 +38,16 @@ const Navbar = ({ isDesktop, isMobile }) => {
             showSidebar();
         }
     }
+
+    useEffect(() => {
+        setIsCartUpdated(true);
+
+        const timeoutId = setTimeout(() => {
+            setIsCartUpdated(false);
+        }, 1000)
+
+        return () => clearTimeout(timeoutId);
+    }, [cartItems]);
 
     const showSidebar = () => {
         console.log('Open sidebar');
@@ -78,7 +89,8 @@ const Navbar = ({ isDesktop, isMobile }) => {
                         </ul>
                     </div>
                 }
-                <ul className="nav-links-list">
+                <div className="nav-links-container">
+                    <ul className="nav-links-list">
                     {/*<li>*/}
                     {/*    <Link to="/">*/}
                     {/*        <FaSearch />*/}
@@ -87,20 +99,30 @@ const Navbar = ({ isDesktop, isMobile }) => {
                     {/*</li>*/}
                     <li>
                         <Link to="/liked">
-                            <FaHeart />
+                            <FaHeart size={25}/>
                         </Link>
                     </li>
                     <li>
                         <Link to="/user">
-                            <FaUser />
+                            <FaUser size={25}/>
                         </Link>
                     </li>
                     <li>
                         <Link to={`/cart/${encodeURIComponent(cartId)}`}>
-                            <FaCartShopping />
+                            <div className="cart-container" style={{position: 'relative'}}>
+                                <FaCartShopping size={25}/>
+                                <div className={`cart-item-count ${isCartUpdated ? 'pulse': ''}`} style={{position: 'absolute', top: -6, right: -6, height: '15px', width: '15px', backgroundColor: 'orange', borderRadius: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '8px'}}>
+                                    {cartItems.length > 0 && (
+                                        <p style={{fontSize: '10px'}}>
+                                            {cartItems.length}
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
                         </Link>
                     </li>
                 </ul>
+                </div>
             </nav>
         </header>
             {isMobile &&

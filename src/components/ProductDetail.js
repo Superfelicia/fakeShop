@@ -2,13 +2,12 @@ import {Link, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {fetchCart, fetchProductDetails} from "../api/productService";
 import {useCart} from "../hooks/CartContext";
-import cart from "./Cart";
 
 const ProductDetail = () => {
     const {productId} = useParams();
     const [productDetail, setProductDetail] = useState(null);
     const [selectedVariant, setSelectedVariant] = useState(null);
-    const { cartId, updateCartId } = useCart();
+    const { cartId, updateCartId, updateCartItems } = useCart();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -28,6 +27,7 @@ const ProductDetail = () => {
                     if (!cartId || cartId !== productDetailsData?.cartId) {
                         console.log("cartId found on productDetailsData", productDetailsData.cartId);
                         updateCartId(productDetailsData.cartId);
+                        updateCartItems(JSON.parse(localStorage.getItem("productsInCart")) || [])
                     } else {
                         console.error("Unable to fetch cartId from product details.");
                     }
@@ -42,7 +42,7 @@ const ProductDetail = () => {
         }
 
         fetchData();
-    }, [productId, cartId, updateCartId]);
+    }, [productId, cartId, updateCartId, updateCartItems]);
 
     const handleVariantChange = (event) => {
         const variantId = event.target.value;
@@ -64,8 +64,9 @@ const ProductDetail = () => {
             localStorage.setItem("productsInCart", JSON.stringify(productsInCart));
 
             updateCartId(cartId);
-            console.log("Produkt tillagd i kundvagnen", productsInCart);
-
+            updateCartItems(productsInCart);
+            console.log(updateCartItems);
+            console.log("Product added to cart", productsInCart);
         } catch (error) {
             console.error('Error adding to cart:', error);
         }

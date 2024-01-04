@@ -1,16 +1,29 @@
-import React, {createContext, useContext, useState} from "react";
+import React, {createContext, useContext, useEffect, useState} from "react";
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
     const [cartId, setCartId] = useState();
+    const [cartItems, setCartItems] = useState([]);
+
+    // ladda produkter i cart från localstorage när komponenten monteras
+    // (dvs. när komponenten skapats och lagts till i DOM:en för första gången)
+    useEffect(() => {
+        const storedCartItems = JSON.parse(localStorage.getItem("productsInCart")) || [];
+        setCartItems(storedCartItems);
+    }, []);
 
     const updateCartId = (newCartId) => {
         setCartId(newCartId);
     };
 
+    const updateCartItems = (newCartItems) => {
+        setCartItems(newCartItems);
+        localStorage.setItem("productsInCart", JSON.stringify(newCartItems));
+    };
+
     return (
-        <CartContext.Provider value={{ cartId, updateCartId}} >
+        <CartContext.Provider value={{ cartId, updateCartId, cartItems, updateCartItems}} >
             {children}
         </CartContext.Provider>
     );

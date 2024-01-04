@@ -262,23 +262,39 @@ table {
   justify-content: space-between;
   align-items: center;
   width: 97%;
-  height: fit-content;
+  height: 100%;
 }
 .header-section .nav-bar .menu-bars {
   padding: 8px;
   background: none;
   color: black;
 }
-.header-section .nav-bar .nav-links-list {
+.header-section .nav-bar .nav-links-container {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  height: 100%;
+}
+.header-section .nav-bar .nav-links-container .nav-links-list {
   display: flex;
 }
-.header-section .nav-bar .nav-links-list li {
+.header-section .nav-bar .nav-links-container .nav-links-list li {
   margin: 0 10px;
   list-style: none;
 }
-.header-section .nav-bar .nav-links-list li > a {
+.header-section .nav-bar .nav-links-container .nav-links-list li > a {
   text-decoration: none;
   color: #000;
+}
+@keyframes pulse {
+  50% {
+    transform: scale(2);
+    transform-origin: center center;
+    color: blue;
+  }
+}
+.header-section .nav-bar .nav-links-container .cart-item-count.pulse {
+  animation: pulse 1s infinite;
 }
 .header-section .desktop-menu {
   display: flex;
