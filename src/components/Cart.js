@@ -54,7 +54,8 @@ const Cart = () => {
 
     const handleUpdateCart = async (lineIdToUpdate, currentQuantity) => {
 
-        const newQuantity = currentQuantity -1;
+        const newQuantity = currentQuantity;
+
         try {
             const response = await updateQuantityInCart(cartId, lineIdToUpdate, newQuantity);
             console.log("Remove from cart response:", response);
@@ -97,8 +98,12 @@ const Cart = () => {
                         <p>{line.node.merchandise.title}</p>
                         <img className="detail-image-container" src={line.node.merchandise.image.url} />
                         <p>{line.node.merchandise.price.amount} {line.node.merchandise.price.currencyCode}</p>
-                        <p>{line.node.quantity}</p>
-                        <button onClick={() => handleUpdateCart(line.node.id, line.node.quantity)}>
+                        <div style={{display: 'flex', justifyContent: 'flex-start', width: '75px'}}>
+                            <button onClick={() => handleUpdateCart(line.node.id, line.node.quantity -1)}>-</button>
+                            <p>{line.node.quantity}</p>
+                            <button onClick={() => handleUpdateCart(line.node.id, line.node.quantity +1)}>+</button>
+                        </div>
+                        <button onClick={() => handleUpdateCart(line.node.id, line.node.quantity -line.node.quantity)}>
                             Remove from cart
                         </button>
                     </li>
