@@ -117,20 +117,17 @@ export const createCart = async (variantIds) => {
     }
 };
 
-export const addProductsToCart = async (cartId, productsToAdd) => {
+export const addProductsToCart = async (cartId, productToAdd) => {
+    console.log(productToAdd);
     // skapa body för GraphQL-anropet
     try {
-        const lines = productsToAdd.map(product => ({
-            quantity: product.quantity,
-            merchandiseId: `${product.variantId}`,
-        }));
-
     const body = {
         query: `
         mutation($cartId: ID!, $lines: [CartLineInput!]!) {
             cartLinesAdd(cartId: $cartId, lines: $lines) {
                 cart {
                     id
+                    totalQuantity
                     createdAt
                     updatedAt
                     lines(first: 50) {
@@ -169,7 +166,10 @@ export const addProductsToCart = async (cartId, productsToAdd) => {
         }`,
         variables: {
             cartId: cartId,
-            lines: lines,
+            lines: {
+                quantity: 1,
+                merchandiseId: productToAdd.id,
+            }
         }
     };
 
@@ -196,6 +196,7 @@ export const fetchCart = async (cartId) => {
             query GetCart($cartId: ID!) {
                 cart(id: $cartId) {
                     id
+                    totalQuantity
                     createdAt
                     updatedAt
                     lines(first: 50) {

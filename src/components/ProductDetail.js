@@ -1,6 +1,6 @@
 import {Link, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {createCart, fetchCart, fetchProductDetails} from "../api/productService";
+import {addProductsToCart, fetchCart, fetchProductDetails} from "../api/productService";
 import {useCart} from "../hooks/CartContext";
 
 const ProductDetail = () => {
@@ -8,12 +8,12 @@ const ProductDetail = () => {
     const [productDetail, setProductDetail] = useState(null);
     const [selectedVariant, setSelectedVariant] = useState(null);
     const { cartId, updateCartId, updateCartItems } = useCart();
+    const [currentCartData, setCurrentCartData] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const productDetailsData = await fetchProductDetails(productId);
-                console.log(productDetailsData);
                 setProductDetail(productDetailsData);
                 // console.log(productDetail);
 
@@ -27,14 +27,18 @@ const ProductDetail = () => {
                     if (!cartId || cartId !== productDetailsData?.cartId) {
                         console.log("cartId found on productDetailsData", productDetailsData.cartId);
                         updateCartId(productDetailsData.cartId);
-                        updateCartItems(JSON.parse(localStorage.getItem("productsInCart")) || [])
                     } else {
                         console.error("Unable to fetch cartId from product details.");
                     }
                 }
 
                 const cartData = await fetchCart(cartId);
-                console.log("cartId from fetchedCart:", cartData);
+                setCurrentCartData(cartData);
+
+                if (currentCartData && cartData.totalQuantity) {
+                    console.log("cartId from fetchedCart:", cartData);
+                    console.log("Currect cartData:", currentCartData.totalQuantity);
+                }
 
             } catch (error) {
                 console.error('Error fetching product detail:', error);
@@ -42,7 +46,7 @@ const ProductDetail = () => {
         }
 
         fetchData();
-    }, [productId, cartId, updateCartId, updateCartItems]);
+    }, [productId, cartId, updateCartId, updateCartItems, currentCartData]);
 
     const handleVariantChange = (event) => {
         const variantId = event.target.value;
@@ -51,34 +55,21 @@ const ProductDetail = () => {
         setSelectedVariant(newSelectedVariant);
     };
 
-    const handleAddToCart = async () => {
+    const handleAddToCart = async (cartId, productToAdd) => {
         if (!selectedVariant) {
             console.error("No variant selected");
             return;
         }
 
         try {
-            const variantId = selectedVariant.id;
+            await addProductsToCart(cartId, productToAdd);
 
-            const existingProductsInCart = JSON.parse(localStorage.getItem('productsInCart')) || [];
-            console.log("Before adding to cart:", existingProductsInCart);
+            // uppdatera antalet baserat på det senaste värdet
+            updateCartItems((prevQuantity) => prevQuantity + 1);
 
-
-            // kolla om produkten redan finns i cart
-            const existingProductIndex = existingProductsInCart.findIndex(product => product.variantId === variantId);
-
-            if (existingProductIndex !== -1) {
-                // produkten finns redan i cart, öka quantity
-                existingProductsInCart[existingProductIndex].quantity += 1;
-            } else {
-                // produkten finns inte, lägg till en ny
-                existingProductsInCart.push({ variantId, quantity: 1 });
-            }
-
-            localStorage.setItem("productsInCart", JSON.stringify(existingProductsInCart));
-            updateCartItems(existingProductsInCart);
             updateCartId(cartId);
-            console.log("Product added to cart", existingProductsInCart);
+            console.log("Product added to cart", productToAdd);
+
         } catch (error) {
             console.error('Error adding to cart:', error);
         }
@@ -133,7 +124,7 @@ const ProductDetail = () => {
             {/*    <p>No variants available</p>*/}
             {/*)}*/}
                     <div className="detail-size">
-                        <button onClick={() => handleAddToCart()}>Add to cart</button>
+                        <button onClick={() => handleAddToCart(cartId, selectedVariant)}>Add to cart</button>
                         {cartId && (
                             <Link to={`/cart/${encodeURIComponent(cartId)}`}>
                                 <button>Go to cart</button>

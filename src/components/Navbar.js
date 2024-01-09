@@ -8,7 +8,7 @@ import {useCart} from "../hooks/CartContext";
 const Navbar = ({ isDesktop, isMobile }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [collections, setCollections] = useState([]);
-    const { cartId, updateCartId, cartItems } = useCart();
+    const { cartId, updateCartId, cartItems, updateCartItems } = useCart();
     const [isCartUpdated, setIsCartUpdated] = useState(false);
 
     useEffect(() => {
@@ -30,7 +30,7 @@ const Navbar = ({ isDesktop, isMobile }) => {
                 updateCartId(storedCartId);
             }
         }
-    }, [cartId, updateCartId]);
+    }, [cartId, updateCartId, updateCartItems]);
 
     const handleCollectionClick = (collectionId) => {
         console.log("Clicked on collection with collectionId:", collectionId);
@@ -111,13 +111,15 @@ const Navbar = ({ isDesktop, isMobile }) => {
                         <Link to={`/cart/${encodeURIComponent(cartId)}`}>
                             <div className="cart-container" style={{position: 'relative'}}>
                                 <FaCartShopping size={25}/>
+                                {cartItems > 0 ? (
                                 <div className={`cart-item-count ${isCartUpdated ? 'pulse': ''}`} style={{position: 'absolute', top: -6, right: -6, height: '15px', width: '15px', backgroundColor: 'orange', borderRadius: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '8px'}}>
-                                    {cartItems.length > 0 && (
                                         <p style={{fontSize: '10px'}}>
-                                            {cartItems.length}
+                                            {cartItems}
                                         </p>
-                                    )}
                                 </div>
+                                ) : (
+                                    <></>
+                                )}
                             </div>
                         </Link>
                     </li>

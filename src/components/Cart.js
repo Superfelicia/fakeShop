@@ -5,7 +5,7 @@ import {useCart} from "../hooks/CartContext";
 const Cart = () => {
     const [cartData, setCartData] = useState(null);
     const [loading, setLoading] = useState(true);
-    const { cartId, updateCartId } = useCart();
+    const { cartId, updateCartId, updateCartItems } = useCart();
 
     useEffect(() => {
         const createOrloadCart = async () => {
@@ -28,20 +28,7 @@ const Cart = () => {
                     const existingCart = await fetchCart(currentCartId);
                     setCartData(existingCart);
                     console.log("existing cart with cartId:", currentCartId);
-
-                    // synka cart med produkter från localStorage
-                    if (storedVariantIds.length > 0) {
-                        await addProductsToCart(currentCartId, storedVariantIds);
-                        const updatedCart = await fetchCart(currentCartId);
-                        console.log("Updated cart:", updatedCart);
-                        if (updatedCart) {
-                            setCartData(updatedCart);
-                        }
-                    }
                 }
-
-                // rensa localstorage efter synk
-                localStorage.removeItem('productsInCart');
             } catch (error) {
                 console.error("Error fetching cartData:", error);
             } finally {
@@ -50,10 +37,9 @@ const Cart = () => {
         };
 
         createOrloadCart();
-    }, [cartId, updateCartId]);
+    }, [cartId, updateCartId, updateCartItems]);
 
     const handleUpdateCart = async (lineIdToUpdate, currentQuantity) => {
-
         const newQuantity = currentQuantity;
 
         try {
@@ -63,14 +49,10 @@ const Cart = () => {
             if (response && response.id) {
                 const updatedCart = await fetchCart(cartId);
                 console.log("Updated cartData:", updatedCart);
-                setCartData(updatedCart);
 
-                // kolla om carten är tom och rensa och återställ om den är det
-                if (updatedCart.lines && updatedCart.lines.edges.length === 0) {
-                    console.log('cart is empty');
-                } else {
-                    console.log('cart is not empty:', updatedCart);
-                }
+                updateCartItems(updatedCart.totalQuantity);
+
+                setCartData(updatedCart);
 
             } else {
                 console.error("failed to remove product from cart");
