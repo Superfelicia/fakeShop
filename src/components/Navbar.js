@@ -1,12 +1,13 @@
 import {Link} from "react-router-dom";
 import {FaBars, FaHeart, FaUser, FaWindowClose} from "react-icons/fa";
 import {FaCartShopping} from "react-icons/fa6";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {fetchCollections} from "../api/productService";
 import {useCart} from "../hooks/CartContext";
 
 const Navbar = ({ isDesktop, isMobile }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const sidebarRef = useRef(null);
     const [collections, setCollections] = useState([]);
     const { cartId, updateCartId, cartItems, updateCartItems } = useCart();
     const [isCartUpdated, setIsCartUpdated] = useState(false);
@@ -54,6 +55,20 @@ const Navbar = ({ isDesktop, isMobile }) => {
         setIsSidebarOpen(!isSidebarOpen);
     };
 
+    const closeSidebar = (event) => {
+        if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+            setIsSidebarOpen(false);
+        }
+    }
+
+    useEffect(() => {
+        document.addEventListener("click", closeSidebar);
+
+        return () => {
+            document.removeEventListener("click", closeSidebar);
+        }
+    }, []);
+
     const filteredCategories = ['Men', 'Women', 'Unisex', 'Shoes'];
 
     return (
@@ -61,7 +76,7 @@ const Navbar = ({ isDesktop, isMobile }) => {
         <header className="header-section">
             <nav className="nav-bar">
                 {isMobile &&
-                    <Link to='#' className='menu-bars' >
+                    <Link ref={sidebarRef} to='#' className='menu-bars' >
                         <FaBars onClick={showSidebar} />
                     </Link>
                 }
@@ -128,8 +143,8 @@ const Navbar = ({ isDesktop, isMobile }) => {
             </nav>
         </header>
             {isMobile &&
-                <div className={isSidebarOpen ? 'sidebar-menu active' : 'sidebar-menu'}>
-                    <Link to='#' className='menu-bars'>
+                <div ref={sidebarRef} className={isSidebarOpen ? 'sidebar-menu active' : 'sidebar-menu'}>
+                    <Link to='#' className='menu-bars' onClick={showSidebar}>
                         <FaWindowClose onClick={showSidebar} />
                     </Link>
                     <ul>
