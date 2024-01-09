@@ -19,7 +19,7 @@ export const CartProvider = ({ children }) => {
 
     const updateCartItems = (newCartItems) => {
         setCartItems(newCartItems);
-        console.log(cartItems);
+        // console.log(cartItems);
     };
 
     return (

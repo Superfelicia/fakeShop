@@ -7,8 +7,7 @@ const ProductDetail = () => {
     const {productId} = useParams();
     const [productDetail, setProductDetail] = useState(null);
     const [selectedVariant, setSelectedVariant] = useState(null);
-    const { cartId, updateCartId, updateCartItems } = useCart();
-    const [currentCartData, setCurrentCartData] = useState(null);
+    const { cartId, updateCartId, cartItems, updateCartItems } = useCart();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -33,12 +32,10 @@ const ProductDetail = () => {
                 }
 
                 const cartData = await fetchCart(cartId);
-                setCurrentCartData(cartData);
+                updateCartItems(cartData.totalQuantity);
+                console.log("Current cartData:", cartItems);
 
-                if (currentCartData && cartData.totalQuantity) {
-                    console.log("cartId from fetchedCart:", cartData);
-                    console.log("Currect cartData:", currentCartData.totalQuantity);
-                }
+
 
             } catch (error) {
                 console.error('Error fetching product detail:', error);
@@ -46,7 +43,7 @@ const ProductDetail = () => {
         }
 
         fetchData();
-    }, [productId, cartId, updateCartId, updateCartItems, currentCartData]);
+    }, [productId, cartId, updateCartId, updateCartItems]);
 
     const handleVariantChange = (event) => {
         const variantId = event.target.value;
@@ -67,6 +64,7 @@ const ProductDetail = () => {
             // uppdatera antalet baserat på det senaste värdet
             updateCartItems((prevQuantity) => prevQuantity + 1);
 
+            localStorage.setItem("cartId", cartId);
             updateCartId(cartId);
             console.log("Product added to cart", productToAdd);
 

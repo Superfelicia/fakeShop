@@ -5,7 +5,7 @@ import {useCart} from "../hooks/CartContext";
 const Cart = () => {
     const [cartData, setCartData] = useState(null);
     const [loading, setLoading] = useState(true);
-    const { cartId, updateCartId, updateCartItems } = useCart();
+    const { cartId, updateCartId, cartItems, updateCartItems } = useCart();
 
     useEffect(() => {
         const createOrloadCart = async () => {
@@ -27,7 +27,8 @@ const Cart = () => {
                     // hämta befintlig cart om cartId finns
                     const existingCart = await fetchCart(currentCartId);
                     setCartData(existingCart);
-                    console.log("existing cart with cartId:", currentCartId);
+                    updateCartItems(existingCart.totalQuantity)
+                    console.log("existing cart with cartId:", currentCartId, cartItems);
                 }
             } catch (error) {
                 console.error("Error fetching cartData:", error);
