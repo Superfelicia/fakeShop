@@ -76,9 +76,9 @@ const Navbar = ({ isDesktop, isMobile }) => {
         <header className="header-section">
             <nav className="nav-bar">
                 {isMobile &&
-                    <Link ref={sidebarRef} to='#' className='menu-bars' >
-                        <FaBars onClick={showSidebar} />
-                    </Link>
+                    <div ref={sidebarRef}  to='#' className='menu-bars' onClick={showSidebar}>
+                        <FaBars />
+                    </div>
                 }
                 {isDesktop &&
                     <div className='desktop-menu'>
@@ -143,10 +143,10 @@ const Navbar = ({ isDesktop, isMobile }) => {
             </nav>
         </header>
             {isMobile &&
-                <div ref={sidebarRef} className={isSidebarOpen ? 'sidebar-menu active' : 'sidebar-menu'}>
-                    <Link to='#' className='menu-bars' onClick={showSidebar}>
-                        <FaWindowClose onClick={showSidebar} />
-                    </Link>
+                <div className={isSidebarOpen ? 'sidebar-menu active' : 'sidebar-menu'}>
+                    <div to='#' className='menu-bars' onClick={closeSidebar}>
+                        <FaWindowClose />
+                    </div>
                     <ul>
                         {collections.map((category) => {
                             if (filteredCategories.includes(category.node.title)) {
