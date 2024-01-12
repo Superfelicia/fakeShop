@@ -61,6 +61,7 @@ table {
 .home-section .hero-container {
   width: 100%;
   height: fit-content;
+  cursor: default;
 }
 .home-section .hero-container .hero-image {
   display: flex;
@@ -357,6 +358,7 @@ body {
   padding: 8px;
   background: none;
   color: black;
+  cursor: pointer;
 }
 .header-section .nav-bar .logo-container {
   display: flex;
@@ -443,6 +445,7 @@ body {
   margin: 10px 0 10px 10px;
   background: none;
   color: black;
+  cursor: pointer;
 }
 .sidebar-menu.active {
   left: 0;

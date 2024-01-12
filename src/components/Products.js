@@ -45,7 +45,7 @@ const Products = () => {
                                     <img src={product.node.featuredImage.url} alt={product.node.title} />
                                 )}
                                 <h3 className="products-name">{product.node.title}</h3>
-                                <p className="product-price">{product.node.variants.edges[0].node.priceV2.amount} {product.node.variants.edges[0].node.priceV2.currencyCode}</p>
+                                <p className="product-price">${product.node.variants.edges[0].node.priceV2.amount} {product.node.variants.edges[0].node.priceV2.currencyCode}</p>
                             </Link>
                             </div>
                         ))}
