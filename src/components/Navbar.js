@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom";
-import {FaBars, FaHeart, FaUser, FaWindowClose} from "react-icons/fa";
+import {FaBars, FaRegHeart, FaRegCircle, FaRegUser, FaWindowClose} from "react-icons/fa";
 import {FaCartShopping} from "react-icons/fa6";
 import {useEffect, useRef, useState} from "react";
 import {fetchCollections} from "../api/productService";
@@ -104,6 +104,15 @@ const Navbar = ({ isDesktop, isMobile }) => {
                         </ul>
                     </div>
                 }
+                <div className="logo-container">
+                    <Link to="/">
+                    <div className="logo-content">
+                            <FaRegCircle />
+                            <FaRegCircle />
+                            <FaRegCircle />
+                    </div>
+                    </Link>
+                </div>
                 <div className="nav-links-container">
                     <ul className="nav-links-list">
                     {/*<li>*/}
@@ -114,12 +123,12 @@ const Navbar = ({ isDesktop, isMobile }) => {
                     {/*</li>*/}
                     <li>
                         <Link to="/liked">
-                            <FaHeart size={25}/>
+                            <FaRegHeart size={25}/>
                         </Link>
                     </li>
                     <li>
                         <Link to="/user">
-                            <FaUser size={25}/>
+                            <FaRegUser size={25}/>
                         </Link>
                     </li>
                     <li>
@@ -127,8 +136,8 @@ const Navbar = ({ isDesktop, isMobile }) => {
                             <div className="cart-container" style={{position: 'relative'}}>
                                 <FaCartShopping size={25}/>
                                 {cartItems > 0 ? (
-                                <div className={`cart-item-count ${isCartUpdated ? 'pulse': ''}`} style={{position: 'absolute', top: -6, right: -6, height: '15px', width: '15px', backgroundColor: 'orange', borderRadius: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '8px'}}>
-                                        <p style={{fontSize: '10px'}}>
+                                <div className={`cart-item-count ${isCartUpdated ? 'pulse': ''}`} style={{position: 'absolute', top: -6, right: -6, height: '15px', width: '15px', backgroundColor: 'red', borderRadius: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '8px'}}>
+                                        <p>
                                             {cartItems}
                                         </p>
                                 </div>

@@ -122,10 +122,10 @@ const ProductDetail = () => {
             {/*    <p>No variants available</p>*/}
             {/*)}*/}
                     <div className="detail-size">
-                        <button onClick={() => handleAddToCart(cartId, selectedVariant)}>Add to cart</button>
+                        <button className="cart-btn" onClick={() => handleAddToCart(cartId, selectedVariant)}>Add to cart</button>
                         {cartId && (
                             <Link to={`/cart/${encodeURIComponent(cartId)}`}>
-                                <button>Go to cart</button>
+                                <button className="cart-btn">Go to cart</button>
                             </Link>
                         )}
                     </div>

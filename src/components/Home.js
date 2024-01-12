@@ -5,7 +5,12 @@ const Home = () => {
         <section className="home-section">
             <div className="hero-container">
                 <div className="hero-content">
-                    <div className="hero-image"></div>
+                    <div className="hero-image">
+                        <div className="hero-text">
+                            <h2>We move</h2>
+                            <p>better</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 

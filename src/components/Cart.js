@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
-import {addProductsToCart, createCart, fetchCart, updateQuantityInCart} from "../api/productService";
+import {createCart, fetchCart, updateQuantityInCart} from "../api/productService";
 import {useCart} from "../hooks/CartContext";
+import {FaMinus, FaPlus} from "react-icons/fa";
 
 const Cart = () => {
     const [cartData, setCartData] = useState(null);
@@ -72,21 +73,28 @@ const Cart = () => {
     }
 
     return (
-        <div className="products-detail-container">
+        <div className="cart-detail-container">
             <h2>Your cart</h2>
-            <div className="detail-content">
+            <div className="cart-detail-content">
             <ul>
                 {cartData.lines.edges.map((line) => (
                     <li key={line.node.id}>
                         <p>{line.node.merchandise.title}</p>
-                        <img className="detail-image-container" src={line.node.merchandise.image.url} />
-                        <p>{line.node.merchandise.price.amount} {line.node.merchandise.price.currencyCode}</p>
-                        <div style={{display: 'flex', justifyContent: 'flex-start', width: '75px'}}>
-                            <button onClick={() => handleUpdateCart(line.node.id, line.node.quantity -1)}>-</button>
-                            <p>{line.node.quantity}</p>
-                            <button onClick={() => handleUpdateCart(line.node.id, line.node.quantity +1)}>+</button>
+                        <img className="cart-image" src={line.node.merchandise.image.url} />
+                        <div className="cart-description-container">
+                            <p>${line.node.merchandise.price.amount} {line.node.merchandise.price.currencyCode}</p>
+                            <div className="quantity-container">
+                                <button className="cart-btn quantity-btn" onClick={() => handleUpdateCart(line.node.id, line.node.quantity -1)}>
+                                    <FaMinus />
+                                </button>
+                                <p>{line.node.quantity}</p>
+                                <button className="cart-btn quantity-btn"  onClick={() => handleUpdateCart(line.node.id, line.node.quantity +1)}>
+                                    <FaPlus />
+                                </button>
+                            </div>
                         </div>
-                        <button onClick={() => handleUpdateCart(line.node.id, line.node.quantity -line.node.quantity)}>
+
+                        <button className="cart-btn"  onClick={() => handleUpdateCart(line.node.id, line.node.quantity -line.node.quantity)}>
                             Remove from cart
                         </button>
                     </li>

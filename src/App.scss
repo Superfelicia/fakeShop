@@ -3,6 +3,7 @@
 @import "styles/home";
 @import "styles/collectionsPage";
 @import "styles/productDetail";
+@import "styles/cart";
 @import url('https://fonts.googleapis.com/css2?family=Nobile:wght@400;500&family=Poppins:wght@100;200;300;400&family=Rethink+Sans:ital,wght@0,400;0,500;1,400&display=swap');
 
 * {
@@ -11,10 +12,14 @@
   box-sizing: border-box;
 }
 
+body {
+  font-family: $fontPrimary;
+}
+
 .header-section {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-evenly;
   align-items: center;
   height: 85px;
   width: 100vw;
@@ -30,6 +35,19 @@
       padding: 8px;
       background: none;
       color: black;
+    }
+
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .logo-content {
+        display: flex;
+        justify-content: space-around;
+        width: 60px;
+        color: black;
+      }
     }
 
     .nav-links-container {
@@ -56,11 +74,16 @@
         50% {
           transform: scale(2);
           transform-origin: center center;
-          color: blue;
         }
       }
 
       .cart-item-count {
+        p {
+          color: white;
+          font-size: 12px;
+          font-weight: bold;
+          font-family: $fontSecondary;
+        }
         &.pulse {
           animation: pulse 1s infinite;
         }
@@ -72,7 +95,7 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    width: 90%;
+    width: 20%;
 
     ul {
       display: flex;

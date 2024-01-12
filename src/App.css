@@ -60,12 +60,37 @@ table {
 }
 .home-section .hero-container {
   width: 100%;
-  height: 400px;
+  height: fit-content;
 }
 .home-section .hero-container .hero-image {
-  height: 450px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  background-color: black;
+  height: 600px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.45)), url("../images/basketball-hero.jpeg");
+}
+.home-section .hero-container .hero-image .hero-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 400px;
+}
+.home-section .hero-container .hero-image .hero-text h2, .home-section .hero-container .hero-image .hero-text p {
+  font-family: "Poppins", sans-serif;
+  font-size: 75px;
+  color: transparent;
+  -webkit-text-stroke-width: 3px;
+  -webkit-text-stroke-color: white;
+}
+.home-section .hero-container .hero-image .hero-text p {
+  font-family: "Rethink Sans", sans-serif;
+  font-size: 55px;
+  text-indent: 200px;
 }
 
 .products-page {
@@ -205,7 +230,7 @@ table {
   width: 100%;
   height: 100vh;
   padding: 20px;
-  background-color: rgba(239, 238, 238, 0.75);
+  margin: 10px 0 10px 0;
 }
 .products-detail-container .detail-content {
   display: flex;
@@ -242,6 +267,66 @@ table {
   font-size: 30px;
   font-weight: bold;
 }
+.products-detail-container .detail-content .detail-description-container .detail-size {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0 10px 0;
+}
+
+.cart-detail-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+.cart-detail-container .cart-detail-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  height: 80%;
+}
+.cart-detail-container .cart-detail-content ul > li {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 550px;
+}
+.cart-detail-container .cart-detail-content .cart-image {
+  width: 350px;
+  border-radius: 5px;
+}
+.cart-detail-container .cart-detail-content .cart-btn {
+  border: none;
+  font-family: "Rethink Sans", sans-serif;
+  background-color: transparent;
+  padding: 3px;
+  font-size: 16px;
+}
+.cart-detail-container .cart-detail-content .cart-description-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin: 10px;
+}
+.cart-detail-container .cart-detail-content .cart-description-container .quantity-container {
+  display: flex;
+  align-items: center;
+  width: 100px;
+  margin-top: 10px;
+  border: 1px solid black;
+  border-radius: 3px;
+}
+.cart-detail-container .cart-detail-content .cart-description-container .quantity-container .quantity-btn {
+  display: flex;
+  font-size: 16px;
+  padding: 6px;
+}
 
 * {
   margin: 0 auto;
@@ -249,10 +334,14 @@ table {
   box-sizing: border-box;
 }
 
+body {
+  font-family: "Rethink Sans", sans-serif;
+}
+
 .header-section {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-evenly;
   align-items: center;
   height: 85px;
   width: 100vw;
@@ -267,6 +356,17 @@ table {
 .header-section .nav-bar .menu-bars {
   padding: 8px;
   background: none;
+  color: black;
+}
+.header-section .nav-bar .logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.header-section .nav-bar .logo-container .logo-content {
+  display: flex;
+  justify-content: space-around;
+  width: 60px;
   color: black;
 }
 .header-section .nav-bar .nav-links-container {
@@ -290,8 +390,13 @@ table {
   50% {
     transform: scale(2);
     transform-origin: center center;
-    color: blue;
   }
+}
+.header-section .nav-bar .nav-links-container .cart-item-count p {
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  font-family: "Poppins", sans-serif;
 }
 .header-section .nav-bar .nav-links-container .cart-item-count.pulse {
   animation: pulse 1s infinite;
@@ -300,7 +405,7 @@ table {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  width: 90%;
+  width: 20%;
 }
 .header-section .desktop-menu ul {
   display: flex;
