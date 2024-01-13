@@ -8,6 +8,7 @@ import CollectionsPage from "./components/CollectionsPage";
 import ProductDetail from "./components/ProductDetail";
 import Cart from "./components/Cart";
 import {CartProvider} from "./hooks/CartContext";
+import Footer from "./components/Footer";
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
                           <Route path="/cart/:cartId" element={<Cart />} />
                       </Routes>
                   </div>
+                  <Footer />
               </div>
           </CartProvider>
       </Router>

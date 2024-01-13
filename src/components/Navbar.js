@@ -1,6 +1,6 @@
 import {Link} from "react-router-dom";
 import {FaBars, FaRegHeart, FaRegCircle, FaRegUser, FaWindowClose} from "react-icons/fa";
-import {FaCartShopping} from "react-icons/fa6";
+import {FaBasketShopping} from "react-icons/fa6";
 import {useEffect, useRef, useState} from "react";
 import {fetchCollections} from "../api/productService";
 import {useCart} from "../hooks/CartContext";
@@ -134,7 +134,7 @@ const Navbar = ({ isDesktop, isMobile }) => {
                     <li>
                         <Link to={`/cart/${encodeURIComponent(cartId)}`}>
                             <div className="cart-container" style={{position: 'relative'}}>
-                                <FaCartShopping size={25}/>
+                                <FaBasketShopping size={25}/>
                                 {cartItems > 0 ? (
                                 <div className={`cart-item-count ${isCartUpdated ? 'pulse': ''}`} style={{position: 'absolute', top: -6, right: -6, height: '15px', width: '15px', backgroundColor: 'red', borderRadius: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '8px'}}>
                                         <p>
