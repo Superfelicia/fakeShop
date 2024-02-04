@@ -100,12 +100,14 @@ const Cart = () => {
                     </li>
                 ))}
             </ul>
-            {cartData.cost && cartData.cost.totalAmount && (
-                <p>
-                    Total: {cartData.cost.totalAmount.amount}{' '}
-                    {cartData.cost.totalAmount.currencyCode}
-                </p>
-            )}
+            </div>
+            <div className="subtotal-container">
+                {cartData.cost && cartData.cost.totalAmount && (
+                    <p>
+                        Total: {cartData.cost.totalAmount.amount}{' '}
+                        {cartData.cost.totalAmount.currencyCode}
+                    </p>
+                )}
             </div>
         </div>
     )

@@ -5,18 +5,18 @@ import {useEffect, useRef, useState} from "react";
 import {fetchCollections} from "../api/productService";
 import {useCart} from "../hooks/CartContext";
 
-const Navbar = ({ isDesktop, isMobile }) => {
+const Navbar = ({ isDesktop, isMobile, onCollectionClick }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const sidebarRef = useRef(null);
     const [collections, setCollections] = useState([]);
-    const { cartId, updateCartId, cartItems, updateCartItems } = useCart();
+    const { cartId, updateCartId, cartItems } = useCart();
     const [isCartUpdated, setIsCartUpdated] = useState(false);
 
     useEffect(() => {
         const fetchAllCollections = async () => {
             try {
                 const collectionData = await fetchCollections();
-                // console.log(collectionData.collections.edges);
+                console.log(collectionData.collections.edges);
                 setCollections(collectionData.collections.edges);
             } catch (error) {
                 console.error('Error fetching collections:', error);
@@ -31,10 +31,11 @@ const Navbar = ({ isDesktop, isMobile }) => {
                 updateCartId(storedCartId);
             }
         }
-    }, [cartId, updateCartId, updateCartItems]);
+    }, [cartId, updateCartId]);
 
-    const handleCollectionClick = (collectionId) => {
+    const handleCollectionClick = (collectionId, collectionTitle) => {
         console.log("Clicked on collection with collectionId:", collectionId);
+        onCollectionClick(collectionTitle, collectionId);
         if (isMobile) {
             showSidebar();
         }
@@ -75,11 +76,6 @@ const Navbar = ({ isDesktop, isMobile }) => {
         <>
         <header className="header-section">
             <nav className="nav-bar">
-                {isMobile &&
-                    <div ref={sidebarRef}  to='#' className='menu-bars' onClick={showSidebar}>
-                        <FaBars />
-                    </div>
-                }
                 {isDesktop &&
                     <div className='desktop-menu'>
                         <ul>
@@ -88,7 +84,7 @@ const Navbar = ({ isDesktop, isMobile }) => {
                                     return (
                                     <li key={category.node.id}>
                                         <Link to={`/categories/${encodeURIComponent(category.node.id)}`}
-                                              onClick={() => handleCollectionClick(category.node.id)}>
+                                              onClick={() => handleCollectionClick(category.node.id, category.node.title)}>
                                             {category.node.title}
                                         </Link>
                                     </li>
@@ -102,6 +98,12 @@ const Navbar = ({ isDesktop, isMobile }) => {
                                 </Link>
                             </li>
                         </ul>
+                    </div>
+                }
+
+                {isMobile &&
+                    <div ref={sidebarRef}  to='#' className='menu-bars' onClick={showSidebar}>
+                        <FaBars />
                     </div>
                 }
                 <div className="logo-container">
@@ -162,7 +164,7 @@ const Navbar = ({ isDesktop, isMobile }) => {
                                 return (
                                     <li key={category.node.id}>
                                         <Link to={`/categories/${encodeURIComponent(category.node.id)}`}
-                                              onClick={() => handleCollectionClick(category.node.id)}>
+                                              onClick={() => handleCollectionClick(category.node.id, category.node.title)}>
                                             {category.node.title}
                                         </Link>
                                     </li>

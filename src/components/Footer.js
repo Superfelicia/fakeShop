@@ -14,13 +14,11 @@ const Footer = () => {
                     <div className="footer-contact-container">
                         <address className="footer-list-content contact">
                             <p className="h4-footer-contact">Address:</p>
-                            <p>Sporty Clothing AB</p>
+                            <p>WeMove Better AB</p>
                             <p>Storgatan 123</p>
                             <p>123 45 Stadshamn</p>
                         </address>
                         <div className="footer-list-content contact">
-                            <h4>Tel:</h4>
-                            <a className="list-item" href="tel:014/248.446">010-222 333 44</a>
                             <h4>Email:</h4>
                             <a className="list-item" href="mailto:wemove@better.com">wemove@better.com</a>
                         </div>
@@ -47,7 +45,7 @@ const Footer = () => {
                     </a>
                 </div>
             </div>
-            <div class="footer-copyright">
+            <div className="footer-copyright">
                 <p>copyright © 2023 all rights reserved</p>
             </div>
         </footer>
